@@ -1,0 +1,87 @@
+4.1
+Mastermind
+
+4.2 & 4.3
+
++ indicates a positive feature/aspect
+- indicates a negative feature/aspect
+
+Example 1: http://www.webgamesonline.com/mastermind/
+https://i.gyazo.com/d24e17b9d6db15386d980d1c224647fa.png
+
+GAMEPLAY
+
+-The way balls are placed: The user clicks on the ball. Then, the cursor's texture is replaced by the selected ball, and clicking on the desired hole places the ball there. Dragging the ball is impossible. I consider this bad design, because it's neither as intuitive as dragging the ball (like example 2?) or as fast as clicking the ball and having it instantly appear in the next hole (like example 4). If the user misplaced a ball inside of a hole, it's impossible to take them out. They can be overwritten by another color, but taking them out of the hole would be more intuitive.
+
+-Amount of different ball colors: 8. That's a bit much in the case of a ball code length of 4.
+
++The amount of balls in the code can be altered. While I consider this feature superfluous (as I'm not interested in playing Mastermind with more than 4 balls in the code), it's a neat option.
+
++Duplicates in the code (i.e. having the same ball color in the code more than once) can be turned on or off. This is a great option to have.
+
++The check button appears right next to the hole where the balls are placed. In this case, that's good design because the cursor will be very close to the check button after placing a ball in the hole.
+
+PRESENTATION
+
+-The color scheme is ugly, and the blue text on the red background is annoying to read.
+
+-The textures have a very slight white outline. It looks hideous and could be fixed with 5 minutes of Photoshop work.
+
++The content on the website is centered.
+
+Example 2: http://www.kidsmathgamesonline.com/logic/mastermind.html
+https://i.gyazo.com/156faddd856507f43d7ef72625472acb.png
+
+GAMEPLAY
+
++The way balls are placed: balls can be dragged to the holes. This is good design. While it's not the fastest option, it's definitely the most intuitive, because it comes closest to physically picking up and letting go of a ball. When a ball is misplaced, it can be taken out of the hole and placed in another one. Again, very intuitive design. Unfortunately, it's not possible to overwrite a ball by another color (the ball first has to be taken out).
+
+-Amount of different ball colors: 8. That's a bit much in the case of a ball code length of 4.
+
+-This game was written in Flash.
+
+PRESENTATION
+
+-The OK button has an obnoxious animation.
+
++Textures look good and the color scheme is decent.
+
++The content on the website is centered.
+
+Example 3: http://www.puffgames.com/mastermind/
+https://i.imgur.com/iy2eWwp.jpg
+
+GAMEPLAY
+
+-The way balls are placed: identical to example 1.
+
++Amount of different ball colors: 6. Great amount in the case of a ball code length of 4.
+
+-There is no check/OK button. The game automatically submits the choice when the fourth ball is placed. While it does speed up the gameplay slightly, I consider it bad design, because now, the user is unable to look at his choice and analyze it before committing to it.
+
+-The game is written in Flash.
+
+PRESENTATION
+
+-The background looks messy. Ball textures look alright.
+
+-The game is not centered on the webpage, which is very off-putting.
+
+Example 4: http://www.archimedes-lab.org/mastermind.html
+https://i.gyazo.com/56b86c9cc0f84a0f3d4de0e9167260ee.png
+
+GAMEPLAY
+
++The way the balls are placed: when the user clicks a ball, that ball is automatically placed into the next empty spot. This is great design, because it is the fastest way to play Mastermind.
+
+-When you win, the website gives you a JavaScript window to tell you that you won. It doesn't have any visual indicator, which is a shame because seeing those 4 black balls when winning a game is very satisfying.
+
++Amount of different ball colors: 6. Great amount in the case of a ball code length of 4.
+
+PRESENTATION
+
++The game looks like a Windows 98 application, which is a pleasing aesthetic (but probably mostly for nostalgic reasons).
+
++The ball textures look nice.
+
+-The content on this website is not centered and looks weird on a 1080p monitor.
