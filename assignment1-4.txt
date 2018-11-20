@@ -1,3 +1,75 @@
+1.1
+We first try connecting to weer.nl and retreiving the wesbite data.
+
+HEAD / HTTP/1.1
+host:weer.nl
+
+HTTP/1.1 301 Moved Permanently
+Date: Tue, 20 Nov 2018 12:53:25 GMT
+Server: Apache
+Status: 301 Moved Permanently
+Location: http://www.weer.nl/
+Content-Type: text/html; charset=UTF-8
+
+We get a 301 status code saying that the content has been moved to www.weer.nl so we try connecting to www.weer.nl instead.
+
+HEAD / HTTP/1.1
+host:www.weer.nl
+
+HTTP/1.1 200 OK
+Age: 351
+Cache-Control: max-age=600
+Content-Type: text/html; charset=utf-8
+Date: Tue, 20 Nov 2018 12:48:16 GMT
+Server: nginx/1.12.0
+Vary: Accept-Encoding
+Via: 1.1 varnish-v4
+X-Cache: HIT
+X-Powered-By: PHP/5.5.26
+X-Varnish: 1046925084 1045199205
+Connection: keep-alive
+
+The HTTP request was succesfull so we can retreive the body content next.
+
+GET / HTTP/1.1
+host:www.weer.nl
+
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Age: 370
+Cache-Control: max-age=600
+Content-Type: text/html; charset=utf-8
+Date: Tue, 20 Nov 2018 12:48:16 GMT
+Server: nginx/1.12.0
+Vary: Accept-Encoding
+Via: 1.1 varnish-v4
+X-Cache: HIT
+X-Powered-By: PHP/5.5.26
+X-Varnish: 1048576424 1045199205
+transfer-encoding: chunked
+Connection: keep-alive
+
+Following to this we get the HTTP response body with the html code of the webpage.
+
+1.2
+Yes the html code is identical to that what we get in a web browser when navigating to this webpage. When clicking any link on the site we are also redirected to this webpage.
+
+1.3
+The X-Cache header field shows if we have found the data requested on a Cache or not. In our example the value of the header is HIT which means that we indeed retreived our content from a cache.
+
+1.4
+The Cache-Control header field indicates after how long the contents of the cache are outdated. The content should not be used anymore if the last update of this cache is longer ago than the indicated expiration time.
+
+2.1
+When the Content-length field is smaller than the number of characters it cuts of the excess and only uploads the first n characters of the string. (Where n is the value of the Content-length field).
+When the Content-length field is larger than the number of characters it adds /r/n at the ecnd of the string which corresponds to newline characters. So it keeps addind "empty" newline characters until the uploaded number of characters is equal to the value of the content-length field.
+
+3.1
+When reloading the website nothing happens and we stay on the same page which means we stay authenticated.
+
+3.2
+If we try requesting the same page it again asks us to authenticate ourselves. This is because HTTP is stateless and once a user logs in, the login information has to be resend to the server with every single HTTP request. When using a webbrowser, the browser automatically sends the login information with every HTTP request and therefore we don't need to authenticate ourselves every time.
+
 4.1
 Mastermind
 
