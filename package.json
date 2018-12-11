@@ -1,0 +1,22 @@
+{
+  "name": "webdata",
+  "version": "1.0.0",
+  "description": "Jelle Römer\r Nils de Beukelaar",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jelster64/WebData.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jelster64/WebData/issues"
+  },
+  "homepage": "https://github.com/Jelster64/WebData#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

@@ -1,0 +1,6 @@
+2.1
+Mouse click on a ball, check whether the number of balls for this guess is not at its maximum,  if so display message that the row is already full, if not display a ball with the corresponding color in the next available cell.
+Mouse click on Delete button, check whether there are balls in the current row, if so remove ball from the right most cell, if not display message that we cannot remove a ball.
+Mouse click on Check button, check whether current row has 4 balls, if not display message that the current row is not full, if so check whether the balls are of the right color and the right position. If a ball is of the right color and in the right position display a black ball in the guessimg cell, if a ball is of the right color but in the wrong position display a white ball in the guessimg cell. If all 4 balls are of the right color and in the right position the game is ended and won, if not and the the maximum number of attempts is reached the game is lost and ended.
+Mouse click on New Game button, remove all balls from all rows and a new game is started.
+Mouse click on Instructions button, display instructions of the game.
