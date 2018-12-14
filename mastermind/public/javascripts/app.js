@@ -102,6 +102,46 @@ function check() {
     return false;
 }
 
+function setSolution() {
+    solution = [0, 0, 0, 0];
+    for (let i = 1; i < 7; i++) {
+        let id = "ballcell" + i;
+        let method = "addBallToSolution(" + i + ")";
+        $(id).setAttribute("onclick", method);
+    }
+    $("greenbutton").innerText = "Set";
+    $("greenbutton").setAttribute("onclick", "trySet()");
+    sout("Please set the solution.");
+}
+
+function addBallToSolution(ball) {
+    if (amountOfBalls < 4) {
+        var filename = "img/ball" + ball + ".png";
+        var cellId = "guess" + attempt + "-" + amountOfBalls;
+        $(cellId).src = filename;
+        guess[amountOfBalls] = ball;
+        amountOfBalls++;
+    } else sout("Can't add another ball: row is already full");
+}
+
+function trySet() {
+    var goAhead = true;
+    for (let i = 0; i < 4; i++) if (guess[i] === 0) goAhead = false;
+    if (!goAhead) sout("Can't set: each solution must contain 4 balls");
+    else {
+        for (let i = 0; i < 4; i++) solution[i] = guess[i];
+        for (let i = 0; i < 4; i++) removeBall();
+        for (let i = 1; i < 7; i++) {
+            let id = "ballcell" + i;
+            let method = "addBall(" + i + ")";
+            $(id).setAttribute("onclick", method);
+        }
+        $("greenbutton").innerText = "Check";
+        $("greenbutton").setAttribute("onclick", "tryCheck()");
+        sout("Solution set.");
+    }
+}
+
 function endGame() {
     sout("You lost the game.");
     // todo: alter game state
@@ -120,8 +160,9 @@ function createAttemptRow() {
     // var $tr1 = $("<tr>");
     var $tbody = $("gametablebody");
 
-    var attemptRow = '<tr>';
+    // var attemptRow = '<tr>';
 
+    var attemptRow = "";
 
     // var insideTR1 = "";
     for (var i = 0; i < 4; i++) {
@@ -139,10 +180,13 @@ function createAttemptRow() {
         attemptRow += '<td><img src="img/egglessomelette.png" class="feedbackimg" id="fb' + maxAttempts + '-' + i + '"></td>';
         // $($tr2).append(td);
     }
-    attemptRow += '</tr>';
+    // attemptRow += '</tr>';
 
-    tr = $.parseHTML(attemptRow);
-    $tbody.prepend(tr);
+    var decoded = $('<tr/>').html(text).text();
+    $tbody.prepend(decoded);
+
+    // tr = $.parseHTML(attemptRow);
+    // $tbody.prepend(tr);
 
     // $("gametablebody").prepend(attemptRow);
     // $("gametablebody first-child").before(attemptRow);
