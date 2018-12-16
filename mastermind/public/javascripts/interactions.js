@@ -41,14 +41,10 @@ function GameState(socket){
             guess[amountOfBalls] = 0;
             var cell = "guess" + attempt + "-" + amountOfBalls;
             $(cell).src = "img/egglessomelette.png";
-        } else sout("Can't remove ball: there are no balls in the row")
+        } else sout("Can't remove ball: there are no balls in the row");
     }
     
     this.tryCheck = function () {
-        if (getPlayerType() === "A") {
-            sout("You're the codemaker. You can't use this button right now.")
-            return;
-        }
         var goAhead = true;
         for (var i = 0; i < 4; i++) if (guess[i] === 0) goAhead = false;
         if (!goAhead) sout("Can't check: each guess must contain 4 balls");
@@ -111,35 +107,23 @@ function GameState(socket){
         amountOfBalls = 0;
         return false;
     }
-
-
-    this.setSolution = function () {
-        for (let i = 1; i < 7; i++) {
-            let id = "ballcell" + i;
-            let method = "addBallToSolution(" + i + ")";
-            $(id).setAttribute("onclick", method);
-        }
-        $("greenbutton").innerText = "Set";
-        $("greenbutton").setAttribute("onclick", "trySet()");
-        sout("Please set the solution.");
-    }
     
     this.addBallToSolution = function (ball) {
-        if (amountOfBalls < 4) {
+        if (this.amountOfBalls < 4) {
             var filename = "img/ball" + ball + ".png";
-            var cellId = "guess" + attempt + "-" + amountOfBalls;
+            var cellId = "guess" + this.attempt + "-" + this.amountOfBalls;
             $(cellId).src = filename;
-            guess[amountOfBalls] = ball;
-            amountOfBalls++;
+            this.guess[this.amountOfBalls] = ball;
+            this.amountOfBalls++;
         } else sout("Can't add another ball: row is already full");
     }
-    
+
     this.trySet = function () {
         var goAhead = true;
         for (let i = 0; i < 4; i++) if (guess[i] === 0) goAhead = false;
         if (!goAhead) sout("Can't set: each solution must contain 4 balls");
         else {
-            for (let i = 0; i < 4; i++) solution[i] = guess[i];
+            for (let i = 0; i < 4; i++) this.solution[i] = this.guess[i];
             for (let i = 0; i < 4; i++) removeBall();
             for (let i = 1; i < 7; i++) {
                 let id = "ballcell" + i;
@@ -148,8 +132,24 @@ function GameState(socket){
             }
             $("greenbutton").innerText = "Check";
             $("greenbutton").setAttribute("onclick", "tryCheck()");
+            $("greenbutton").setAttribute("class", "pure-button check-button pure-button-disabled");
+            $("redbutton").setAttribute("class", "pure-button delete-button pure-button-disabled");
             sout("Solution set.");
         }
+    }
+
+    this.setSolution = function () {
+        for (let i = 1; i < 7; i++) {
+            let id = "ballcell" + i;
+            // let method = "gs.addBallToSolution(" + i + ")";
+            // $(id).setAttribute("onclick", method);
+
+            document.getElementById(id).addEventListener("click", this.addBallToSolution(i));
+        }
+        $("greenbutton").innerText = "Set";
+        // $("greenbutton").setAttribute("onclick", "trySet()");
+        $("greenbutton").addEventListener("click", trySet());
+        sout("Please set the solution.");
     }
 
     this.isSolutionSet = function () {
@@ -194,10 +194,13 @@ function soutPerm(string) {
                 //TODO: let player A set solution and disable his input from then on
 
                 soutPerm("Player A: please set the solution.");
-                setSolution();
+                gs.setSolution();
 
                 while (!gs.isSolutionSet()) {
                     // do nothing, just wait
+                    setTimeout(function () {
+                        console.log("Waiting until solution is set...");
+                    }, 2000);
                 }
 
                 let outgoingMsg = Messages.O_SOLUTION;
@@ -209,21 +212,25 @@ function soutPerm(string) {
             }
         }
 
-        //Player B: wait for target word and then start guessing ...
-        if( incomingMsg.type == Messages.T_TARGET_WORD && gs.getPlayerType() == "B"){
-            gs.setTargetWord(incomingMsg.data);
-
-            sb.setStatus(Status["player2Intro"]);
-            gs.initializeVisibleWordArray(); // initialize the word array, now that we have the word
-            ab.initialize();
-            vw.setWord(gs.getVisibleWordArray());
+        //Player B: wait for solution and then start guessing ...
+        if( incomingMsg.type == Messages.T_SOLUTION && gs.getPlayerType() == "B"){
+            gs.setSolution(incomingMsg.data);
+            soutPerm("Player B: start guessing.");
         }
 
+        //Player A: interpret when player B adds a ball
+        if( incomingMsg.type == Messages.T_ADD_BALL && gs.getPlayerType()=="A"){
+            gs.addBall(incomingMsg.data);
+        }
+
+        //Player A: interpret when player B removes a ball
+        if( incomingMsg.type == Messages.T_REMOVE_BALL && gs.getPlayerType()=="A"){
+            gs.removeBall();
+        }
 
         //Player A: wait for guesses and update the board ...
         if( incomingMsg.type == Messages.T_MAKE_A_GUESS && gs.getPlayerType()=="A"){
-            sb.setStatus(Status["guessed"] + incomingMsg.data);
-            gs.updateGame(incomingMsg.data);
+            gs.tryCheck();
         }
     };
 
@@ -232,11 +239,11 @@ function soutPerm(string) {
     };
     
     //server sends a close event only if the game was aborted from some side
-    socket.onclose = function(){
-        if(gs.whoWon()==null){
-            sb.setStatus(Status["aborted"]);
-        }
-    };
+    // socket.onclose = function(){
+    //     if(gs.whoWon()==null){
+    //         sb.setStatus(Status["aborted"]);
+    //     }
+    // };
 
     socket.onerror = function(){  
     };
