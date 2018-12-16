@@ -55,7 +55,7 @@
 	 /* 
 	 * Player B to server OR server to Player A: add ball
 	 */
-    exports.T_ADD_BALL = "ADD-BALL";         
+    exports.T_ADD_BALL = "ADD-BALL";
     exports.O_ADD_BALL = {
         type: exports.T_ADD_BALL,
         data: null
@@ -65,7 +65,7 @@
     /* 
 	 * Player B to server OR server to Player A: check if guess is correct
 	 */
-    exports.T_MAKE_A_GUESS = "MAKE-A-GUESS";         
+    exports.T_MAKE_A_GUESS = "MAKE-A-GUESS";
     exports.O_MAKE_A_GUESS = {
         type: exports.T_MAKE_A_GUESS,
         data: null
@@ -75,7 +75,7 @@
     /* 
 	 * Player B to server OR server to Player A: remove ball
 	 */
-    exports.T_REMOVE_BALL = "REMOVE-BALL";         
+    exports.T_REMOVE_BALL = "REMOVE-BALL";
     exports.O_REMOVE_BALL = {
         type: exports.T_REMOVE_BALL,
         data: null
@@ -85,7 +85,7 @@
 	 /* 
      * Server to Player A & B: game over with result won/loss 
      */
-    exports.T_GAME_OVER = "GAME-OVER";              
+    exports.T_GAME_OVER = "GAME-OVER";
     exports.O_GAME_OVER = {
         type: exports.T_GAME_OVER,
         data: null

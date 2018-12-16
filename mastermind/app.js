@@ -18,7 +18,6 @@ app.get("/play", (req, res) => {
     res.sendFile("game.html", { root: "./public" });
 });
 
-// http.createServer(app).listen(port);
 var server = http.createServer(app);
 const wss = new websocket.Server({ server });
 
