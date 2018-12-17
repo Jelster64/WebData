@@ -8,7 +8,7 @@
         crossorigin="anonymous">
     <!-- <script src="https://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script> -->
     <link rel="stylesheet" type="text/css" href="stylesheets/game.css">
-       
+
 </head>
 
 <body>
@@ -140,13 +140,6 @@
                     <table class="balltable">
                         <tbody>
                             <tr>
-                                <!-- <td class="ballcell"><img id="ballcell1" onClick="addBall(1)" src="img/ball1.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell2" onClick="addBall(2)" src="img/ball2.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell3" onClick="addBall(3)" src="img/ball3.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell4" onClick="addBall(4)" src="img/ball4.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell5" onClick="addBall(5)" src="img/ball5.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell6" onClick="addBall(6)" src="img/ball6.png" style="width: 100%"></td> -->
-
                                 <td class="ballcell"><img id="ballcell1" src="img/ball1.png" style="width: 100%"></td>
                                 <td class="ballcell"><img id="ballcell2" src="img/ball2.png" style="width: 100%"></td>
                                 <td class="ballcell"><img id="ballcell3" src="img/ball3.png" style="width: 100%"></td>
@@ -166,8 +159,10 @@
             </tr>
             <tr>
                 <td colspan=10 class="buttons">
-                    <button class="pure-button pure-button-primary">New Game</button>
-                    <button class="pure-button pure-button-primary">Instructions</button>
+                    <button id="fullscreenbutton" class="pure-button pure-button-primary">Toggle fullscreen</button>
+                    <form action="play">
+                        <button id="playagainbutton" class="pure-button pure-button-primary pure-button-disabled" type="submit">Play again</button>
+                    </form>
                 </td>
             </tr>
             <tr>

@@ -187,7 +187,18 @@ function GameState(socket) {
         this.disableBallButtons();
         this.disableButtons();
         this.enablePlayAgainButton();
-        soutPerm("Player " + this.whoWon() + " won the game!");
+        if (this.whoWon() == "A") soutPerm("The codemaker won the game!");
+        else soutPerm("The codebreaker won the game!");
+    }
+
+    this.toggleFullscreen = function () {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
     }
 }
 
@@ -210,6 +221,8 @@ function soutPerm(string) {
     socket.onmessage = function (event) {
 
         let incomingMsg = JSON.parse(event.data);
+
+        $("fullscreenbutton").addEventListener('click', gs.toggleFullscreen.bind(gs));
 
         //set player type
         if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
@@ -253,6 +266,18 @@ function soutPerm(string) {
                 socket.send(JSON.stringify(outgoingMsg));
             }
             $("greenbutton").addEventListener('click', sendCheck.bind(gs));
+            //Player B: send results of the game to the server when the game is done
+            var sendWinner = function () {
+                setTimeout(function () {
+                    if (gs.whoWon() != null && gs.getPlayerType() == "B") {
+                        let outgoingMsg = Messages.O_GAME_WON_BY;
+                        outgoingMsg.data = gs.whoWon();
+                        socket.send(JSON.stringify(outgoingMsg));
+                    }
+                    console.log("sending winner to server");
+                }, 500);
+            }
+            $("greenbutton").addEventListener('click', sendWinner.bind(gs));
 
             $("redbutton").addEventListener('click', gs.removeBall.bind(gs));
             var sendDelete = function () {
@@ -291,12 +316,7 @@ function soutPerm(string) {
             gs.tryCheck();
         }
 
-        //Player B: send results of the game to the server when the game is done
-        if (gs.whoWon() != null && gs.getPlayerType() == "B") {
-            let outgoingMsg = Messages.O_GAME_WON_BY;
-            outgoingMsg.data = gs.whoWon();
-            socket.send(JSON.stringify(outgoingMsg));
-        }
+
     };
 
     socket.onopen = function () {

@@ -21,7 +21,7 @@ app.use(express.static(__dirname + "/public"));
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => {
     var count = 0;
-    if (req.signedCookies != null) {
+    if (!isNaN(req.signedCookies.visitCount)) {
         //if there's already a cookie, update the count
         count = req.signedCookies.visitCount;
     }
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 
 app.get("/play", (req, res) => {
     var count = 0;
-    if (req.signedCookies != null) {
+    if (!isNaN(req.signedCookies.visitCount)) {
         //if there's already a cookie, update the count
         count = req.signedCookies.visitCount;
     }
