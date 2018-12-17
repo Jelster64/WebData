@@ -92,15 +92,5 @@
     };
     //exports.S_REMOVE_BALL does not exist, as data needs to be set
 
-	 /* 
-     * Server to Player A & B: game over with result won/loss 
-     */
-    exports.T_GAME_OVER = "GAME-OVER";
-    exports.O_GAME_OVER = {
-        type: exports.T_GAME_OVER,
-        data: null
-    };
-
-
 }(typeof exports === "undefined" ? this.Messages = {} : exports));
 //if exports is undefined, we are on the client; else the server

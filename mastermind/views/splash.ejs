@@ -35,7 +35,11 @@
                     <%= gamesWonByB %> 
                     won by the codebreaker. You've joined the game 
                     <%= count %> 
-                    times.
+                    <%if (count != 1) { %>
+                        times.
+                    <% } else { %>
+                        time.
+                    <% } %>
         </p>
     </main>
 </body>
