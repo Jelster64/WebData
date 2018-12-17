@@ -6,6 +6,7 @@ function GameState(socket) {
     this.amountOfBalls = 0;
     this.attempt = 1;
     this.maxAttempts = 10;
+    this.winner = null;
 
     this.getPlayerType = function () {
         return this.playerType;
@@ -27,6 +28,10 @@ function GameState(socket) {
 
     this.getGuess = function () {
         return this.guess;
+    }
+
+    this.whoWon = function () {
+        return this.winner;
     }
 
     this.addBall = function (id) {
@@ -52,15 +57,18 @@ function GameState(socket) {
     }
 
     this.tryCheck = function () {
+        console.log(this.guess);
         var goAhead = true;
         for (var i = 0; i < 4; i++) if (this.guess[i] == 0) goAhead = false;
         if (!goAhead) sout("Can't check: each guess must contain 4 balls");
         else if (this.check()) {
-            sout("Congratulations!");
-            this.disableBallButtons();
+            this.winner = "B";
             this.endGame();
         }
-        if (this.attempt > this.maxAttempts) this.endGame();
+        if (this.attempt > this.maxAttempts) {
+            this.winner = "A";
+            this.endGame();
+        }
     }
 
     this.check = function () {
@@ -144,7 +152,6 @@ function GameState(socket) {
             let id = "ballcell" + i;
             $(id).addEventListener('click', this.addBallToSolution.bind(this, i));
         }
-        $("greenbutton").innerText = "Set";
         $("greenbutton").addEventListener('click', this.trySet.bind(this));
         $("redbutton").addEventListener('click', this.removeBall.bind(this));
         sout("Please set the solution.");
@@ -172,8 +179,15 @@ function GameState(socket) {
         }
     }
 
+    this.enablePlayAgainButton = function () {
+        $("playagainbutton").setAttribute("class", "pure-button pure-button-primary");
+    }
+
     this.endGame = function () {
-        
+        this.disableBallButtons();
+        this.disableButtons();
+        this.enablePlayAgainButton();
+        soutPerm("Player " + this.whoWon() + " won the game!");
     }
 }
 
@@ -193,11 +207,6 @@ function soutPerm(string) {
     var socket = new WebSocket("ws://localhost:3000");
     var gs = new GameState(socket);
 
-
-
-
-
-
     socket.onmessage = function (event) {
 
         let incomingMsg = JSON.parse(event.data);
@@ -207,33 +216,16 @@ function soutPerm(string) {
 
             gs.setPlayerType(incomingMsg.data);//should be "A" or "B"
 
-            //if player type is A, (1) pick a word, and (2) sent it to the server
+            //if player type is A, wait for player B to join, then set the solution
             if (gs.getPlayerType() == "A") {
-
-                //TODO: let player A set solution and disable his input from then on
-
-                soutPerm("Player A: please set the solution.");
-                // for (let i = 1; i < 7; i++) {
-                //     let id = "ballcell" + i;
-                //     document.getElementById(id).addEventListener("click", gs.addBallToSolution(i));
-                // }
-                gs.setSolution();
-
-                // while (!gs.isSolutionSet()) {
-                //     // do nothing, just wait
-                //     setTimeout(function () {
-                //         console.log("Waiting until solution is set...");
-                //     }, 2000);
-                // }
-                var sendSolution = function () {
-                    let outgoingMsg = Messages.O_SOLUTION;
-                    outgoingMsg.data = gs.getSolution();
-                    socket.send(JSON.stringify(outgoingMsg));
-                }
-                $("greenbutton").addEventListener("click", sendSolution.bind(this));
+                $("greenbutton").innerText = "Set";
+                soutPerm("Waiting for another player to join...");
             }
-            else {
+            else { //if player type is B, let player A know that you joined and wait for the solution
                 gs.disableButtons();
+                let outgoingMsg = Messages.O_PLAYER_B_JOINED;
+                outgoingMsg.data = 9;
+                socket.send(JSON.stringify(outgoingMsg));
                 soutPerm("Player B: please wait for player A to set the solution.");
             }
         }
@@ -261,7 +253,7 @@ function soutPerm(string) {
                 socket.send(JSON.stringify(outgoingMsg));
             }
             $("greenbutton").addEventListener('click', sendCheck.bind(gs));
-            
+
             $("redbutton").addEventListener('click', gs.removeBall.bind(gs));
             var sendDelete = function () {
                 let outgoingMsg = Messages.O_REMOVE_BALL;
@@ -271,6 +263,17 @@ function soutPerm(string) {
             $("redbutton").addEventListener('click', sendDelete.bind(gs));
 
             soutPerm("Player B: start guessing.");
+        }
+
+        //Player A: start game when player B joins
+        if (incomingMsg.type == Messages.T_PLAYER_B_JOINED && gs.getPlayerType() == "A") {
+            gs.setSolution();
+            var sendSolution = function () {
+                let outgoingMsg = Messages.O_SOLUTION;
+                outgoingMsg.data = gs.getSolution();
+                socket.send(JSON.stringify(outgoingMsg));
+            }
+            $("greenbutton").addEventListener("click", sendSolution.bind(this));
         }
 
         //Player A: interpret when player B adds a ball
@@ -287,6 +290,13 @@ function soutPerm(string) {
         if (incomingMsg.type == Messages.T_MAKE_A_GUESS && gs.getPlayerType() == "A") {
             gs.tryCheck();
         }
+
+        //Player B: send results of the game to the server when the game is done
+        if (gs.whoWon() != null && gs.getPlayerType() == "B") {
+            let outgoingMsg = Messages.O_GAME_WON_BY;
+            outgoingMsg.data = gs.whoWon();
+            socket.send(JSON.stringify(outgoingMsg));
+        }
     };
 
     socket.onopen = function () {
@@ -294,11 +304,12 @@ function soutPerm(string) {
     };
 
     //server sends a close event only if the game was aborted from some side
-    // socket.onclose = function(){
-    //     if(gs.whoWon()==null){
-    //         sb.setStatus(Status["aborted"]);
-    //     }
-    // };
+    socket.onclose = function () {
+        if (gs.whoWon() == null) {
+            gs.endGame();
+            soutPerm("Your opponent has disconnected from the server.");
+        }
+    };
 
     socket.onerror = function () {
     };

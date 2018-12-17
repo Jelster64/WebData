@@ -42,6 +42,16 @@
     };
     exports.S_PLAYER_B = JSON.stringify(exports.O_PLAYER_B);
 
+    /* 
+	 * Player B to server OR server to Player A: player B joined
+	 */
+    exports.T_PLAYER_B_JOINED = "PLAYER-B-JOINED";
+    exports.O_PLAYER_B_JOINED = {
+        type: exports.T_PLAYER_B_JOINED,
+        data: null
+    };
+    //exports.S_PLAYER_B_JOINED does not exist, as data needs to be set
+
 	 /* 
      * Player A to server OR server to Player B: this is the solution
      */

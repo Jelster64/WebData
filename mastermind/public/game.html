@@ -191,13 +191,6 @@
                     <table class="balltable">
                         <tbody>
                             <tr>
-                                <!-- <td class="ballcell"><img id="ballcell1" onClick="addBall(1)" src="img/ball1.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell2" onClick="addBall(2)" src="img/ball2.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell3" onClick="addBall(3)" src="img/ball3.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell4" onClick="addBall(4)" src="img/ball4.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell5" onClick="addBall(5)" src="img/ball5.png" style="width: 100%"></td>
-                                <td class="ballcell"><img id="ballcell6" onClick="addBall(6)" src="img/ball6.png" style="width: 100%"></td> -->
-
                                 <td class="ballcell"><img id="ballcell1" src="img/ball1.png" style="width: 100%"></td>
                                 <td class="ballcell"><img id="ballcell2" src="img/ball2.png" style="width: 100%"></td>
                                 <td class="ballcell"><img id="ballcell3" src="img/ball3.png" style="width: 100%"></td>
@@ -217,8 +210,9 @@
             </tr>
             <tr>
                 <td colspan=10 class="buttons">
-                    <button class="pure-button pure-button-primary">New Game</button>
-                    <button class="pure-button pure-button-primary">Instructions</button>
+                    <form action="play">
+                        <input id="playagainbutton" type="submit" value="Play again" class="pure-button pure-button-primary pure-button-disabled">
+                    </form>
                 </td>
             </tr>
             <tr>

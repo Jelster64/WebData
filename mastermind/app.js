@@ -24,6 +24,9 @@ const wss = new websocket.Server({ server });
 var websockets = {};//property: websocket, value: game
 
 var gamesInitialized = 0;
+var gamesWonByA = 0;
+var gamesWonByB = 0;
+
 var currentGame = new Game(gamesInitialized++);
 var connectionID = 0;//each websocket receives a unique ID
 
@@ -95,8 +98,17 @@ wss.on("connection", function connection(ws) {
                     gameObj.playerB.send(message);
                 }
             }
+            
         }
-        else {// TODO STILL GOTTA FIX UP THESE MESSAGES
+        else {
+            /*
+             * player B automatically lets the server know that he joined;
+             * this is forwarded to A
+             */
+            if (oMsg.type == messages.T_PLAYER_B_JOINED) {
+                gameObj.playerA.send(message);
+            }
+
             /*
              * player B can add a ball;
              * this is forwarded to A
@@ -126,8 +138,16 @@ wss.on("connection", function connection(ws) {
              */
             if (oMsg.type == messages.T_GAME_WON_BY) {
                 gameObj.setStatus(oMsg.data);
+
                 //game was won by somebody, update statistics
-                gameStatus.gamesCompleted++;
+                switch (oMsg.data) {
+                    case "A":
+                        gamesWonByA++;
+                        break;
+                    case "B":
+                        gamesWonByB++;
+                        break;
+                }
             }
         }
     });
@@ -148,7 +168,6 @@ wss.on("connection", function connection(ws) {
 
             if (gameObj.isValidTransition(gameObj.gameState, "ABORTED")) {
                 gameObj.setStatus("ABORTED");
-                //gameStatus.gamesAborted++;
 
                 /*
                  * determine whose connection remains open;
