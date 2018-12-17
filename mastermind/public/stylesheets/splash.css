@@ -1,4 +1,4 @@
-body {
+﻿body {
     background-color: #2f3136;
 }
 
@@ -81,3 +81,24 @@ button {
     background-color: #ff9d00;
     left: 75%;
 }
+
+p {
+    position: absolute;
+    background-color: #5b5b5b;
+    border-radius: 10%;
+    padding: 40px;
+    color: #FFFFFF;
+    margin: 10px;
+    bottom: 20px;
+    left: 20%;
+}
+
+    p:before {
+        content: "¯\_(ツ)_/¯";
+        color: #141fe5;
+    }
+
+    p:after {
+        content: "(° ͜ʖ ͡°)";
+        color: #141fe5;
+    }
