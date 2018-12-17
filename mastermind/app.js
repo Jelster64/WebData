@@ -1,20 +1,44 @@
 var express = require("express");
 var http = require("http");
+var credentials = require("./credentials");
 var websocket = require("ws");
 
 var messages = require("./public/javascripts/messages");
+var gameStatus = require("./statTracker");
 var Game = require("./game");
+var cookies = require("cookie-parser");
 
 var port = process.argv[2];
 var app = express();
+app.use(cookies(credentials.cookieSecret));
 
 app.use(express.static(__dirname + "/public"));
 
-app.get("/", (req, res) => {
-    res.sendFile("splash.html", { root: "./public" });
-});
+// app.get("/", (req, res) => {
+//     res.sendFile("splash.html", { root: "./public" });
+// });
+
+app.set('view engine', 'ejs')
+app.get('/', (req, res) => {
+    var count = 0;
+    if (req.signedCookies != null) {
+        //if there's already a cookie, update the count
+        count = req.signedCookies.visitCount;
+    }
+    res.render('splash.ejs', { gamesInitialized: gameStatus.gamesInitialized, gamesWonByA: gameStatus.gamesWonByA, gamesWonByB: gameStatus.gamesWonByB, count: count });
+})
 
 app.get("/play", (req, res) => {
+    var count = 0;
+    if (req.signedCookies != null) {
+        //if there's already a cookie, update the count
+        count = req.signedCookies.visitCount;
+    }
+    count++;
+    res.cookie("visitCount", count, { signed: true });
+    console.log(count);
+    // res.send();
+
     res.sendFile("game.html", { root: "./public" });
 });
 
@@ -23,11 +47,7 @@ const wss = new websocket.Server({ server });
 
 var websockets = {};//property: websocket, value: game
 
-var gamesInitialized = 0;
-var gamesWonByA = 0;
-var gamesWonByB = 0;
-
-var currentGame = new Game(gamesInitialized++);
+var currentGame = new Game(gameStatus.gamesInitialized++);
 var connectionID = 0;//each websocket receives a unique ID
 
 
@@ -69,7 +89,7 @@ wss.on("connection", function connection(ws) {
      * if a player now leaves, the game is aborted (player is not preplaced)
      */
     if (currentGame.hasTwoConnectedPlayers()) {
-        currentGame = new Game(gamesInitialized++);
+        currentGame = new Game(gameStatus.gamesInitialized++);
     }
 
     /*
@@ -98,7 +118,7 @@ wss.on("connection", function connection(ws) {
                     gameObj.playerB.send(message);
                 }
             }
-            
+
         }
         else {
             /*
@@ -142,10 +162,10 @@ wss.on("connection", function connection(ws) {
                 //game was won by somebody, update statistics
                 switch (oMsg.data) {
                     case "A":
-                        gamesWonByA++;
+                        gameStatus.gamesWonByA++;
                         break;
                     case "B":
-                        gamesWonByB++;
+                        gameStatus.gamesWonByB++;
                         break;
                 }
             }

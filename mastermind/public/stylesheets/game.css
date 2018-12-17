@@ -15,7 +15,7 @@ body {
     }
 
     to {
-        top: 100%;
+        top: 90%;
     }
 }
 
@@ -78,6 +78,7 @@ td {
     border-radius: 100%;
     animation-name: toptobottom;
     animation-iteration-count: infinite;
+    top: 0%;
 }
 
 #circle1 {
