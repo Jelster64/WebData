@@ -2,10 +2,81 @@ body {
     background-color: #2f3136;
 }
 
-.play-button {
-    color: #ffffff;
-    background: rgb(28, 184, 65);
+.logo {
 }
 
-.logo {
+#title {
+	position: fixed;
+  	top: 40%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+
+}
+
+@keyframes wobbly {
+    from {
+        border-radius: 100%;
+    }
+
+    to {
+        border-radius: 20%;
+    }
+}
+
+
+button {
+    position: absolute;
+    color: #ffffff;
+    background-color: #141fe5;
+    border: 0px;
+    left: 45%;
+    font-family: Broadway;
+    font-size: 30px;
+}
+
+    button:hover {
+        background-color: #154799;
+    }
+
+    button:active {
+        font-family: 'Comic Sans MS';
+    }
+
+.circle {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+    border-radius: 100%;
+    margin: 20px;
+    top: 60%;
+    animation-duration: 1s;
+    animation-name: wobbly;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    transition: transform 2s;
+}
+
+.circle:hover {
+    transform: scale(1.2);
+}
+
+#circle1 {
+    background-color: #c94224;
+    left: 15%;
+}
+
+#circle2 {
+    background-color: #24c93d;
+    left: 30%;
+}
+
+#circle4 {
+    background-color: #be23c9;
+    left: 60%;
+}
+
+#circle5 {
+    background-color: #ff9d00;
+    left: 75%;
 }
