@@ -1,0 +1,122 @@
+body {
+    background-color: #2f3136;
+}
+
+.gametable {
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #ffffff;
+}
+
+@keyframes toptobottom{
+    from {
+        top: 0%;
+    }
+
+    to {
+        top: 100%;
+    }
+}
+
+.buttons {
+    text-align: center;
+}
+
+.balltable {
+    width: 100%;
+}
+
+.ballcell {
+    position: static;
+    margin-left: auto;
+    margin-right: auto;
+    transition: transform 1s;
+}
+
+td {
+    border: 2px solid #ffffff;
+}
+
+.feedbackimg {
+    width: 20px;
+}
+
+.guessimg {
+    width: 100%;
+}
+
+.check-button {
+    color: #ffffff;
+    background: rgb(28, 184, 65);
+}
+
+.delete-button {
+    color: #ffffff;
+    background: rgb(202, 60, 60);
+}
+
+.textfield {
+    text-align: center;
+    color: #ffffff;
+    height: 68px;
+}
+
+.ballcell:hover {
+    transform: scale(1.2);
+}
+
+.pure-button:active {
+   opacity: 0.5;
+}
+
+.circle {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+    border-radius: 100%;
+    animation-name: toptobottom;
+    animation-iteration-count: infinite;
+}
+
+#circle1 {
+    background-color: #c94224;
+    animation-duration: 6s;
+    left: 5%;
+}
+
+#circle2 {
+    background-color: #24c93d;
+    animation-duration: 3s;
+    animation-delay: 2s;
+    left: 15%;
+}
+
+#circle3 {
+    background-color: #be23c9;
+    animation-duration: 7s;
+    animation-delay: 1s;
+    left: 22%;
+}
+
+#circle4 {
+    background-color: #141fe5;
+    animation-duration: 8s;
+    animation-delay: 1.5s;
+    right: 5%;
+}
+
+#circle5 {
+    background-color: #ff9d00;
+    animation-duration: 2s;
+    animation-delay: 0.5s;
+    right: 15%;
+}
+
+#circle6 {
+    background-color: #ff00e1;
+    animation-duration: 5s;
+    animation-delay: 2s;
+    right: 30%;
+}
